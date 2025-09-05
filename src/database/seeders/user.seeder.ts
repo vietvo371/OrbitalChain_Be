@@ -79,4 +79,8 @@ export class UserSeeder {
 
     console.log('✅ Users seeded successfully!');
   }
+
+  async clear(): Promise<void> {
+    await this.userRepository.delete({});
+  }
 }

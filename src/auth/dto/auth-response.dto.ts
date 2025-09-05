@@ -5,7 +5,7 @@ export class AuthResponseDto {
   user: {
     id: string;
     wallet_address: string;
-    email: string;
+    email?: string;
     role: UserRole;
     points: number;
     joined_at: Date;

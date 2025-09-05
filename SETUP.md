@@ -24,7 +24,7 @@ DB_NAME=orbital_chain
 
 # Application Configuration
 NODE_ENV=development
-PORT=3000
+PORT=3030
 FRONTEND_URL=http://localhost:3000
 
 # JWT Configuration (for future authentication)
@@ -36,12 +36,22 @@ BLOCKCHAIN_RPC_URL=https://your-blockchain-rpc-url
 BLOCKCHAIN_CONTRACT_ADDRESS=0x...
 ```
 
-3. Create the PostgreSQL database:
-```sql
-CREATE DATABASE orbital_chain;
+3. Set up the database:
+```bash
+# Option 1: Use the setup script (Recommended)
+./scripts/setup-database.sh
+
+# Option 2: Manual setup
+createdb orbital_chain
+psql -d orbital_chain -f src/database/setup.sql
 ```
 
-4. Start the application:
+4. Seed the database with sample data:
+```bash
+yarn seed:seed
+```
+
+5. Start the application:
 ```bash
 # Development mode
 yarn start:dev
@@ -53,7 +63,7 @@ yarn start:prod
 
 ## API Endpoints
 
-The API will be available at `http://localhost:3000/api/v1`
+The API will be available at `http://localhost:3030/api/v1`
 
 ### Health Check
 - `GET /api/v1/health` - API health status
@@ -148,12 +158,42 @@ The application uses the following entities with their relationships:
 - ✅ User registration and login
 - ✅ Password change functionality
 - ✅ Protected routes with guards
+- ✅ Database seeding system
+- ✅ Sample data for testing
+
+## Database Seeding
+
+The project includes a comprehensive seeding system with sample data:
+
+### Seeding Commands
+```bash
+# Seed the database with sample data
+yarn seed:seed
+
+# Clear all seeded data
+yarn seed:clear
+
+# Clear and reseed the database
+yarn seed:reset
+```
+
+### Sample Data Included
+- **6 Users**: 1 admin, 1 moderator, 4 regular users
+- **10 Debris Objects**: Space debris with TLE data and risk scores
+- **10 Observations**: User observations with location data
+- **10 Moderations**: Moderation decisions for observations
+- **13 Blockchain Logs**: Transaction logs for debris data
+
+### Test Credentials
+- **Admin**: admin@orbitalchain.com / admin123
+- **Moderator**: moderator@orbitalchain.com / moderator123
+- **User**: user1@orbitalchain.com / user123
 
 ## Authentication Examples
 
 ### Register a new user
 ```bash
-curl -X POST http://localhost:3000/api/v1/auth/register \
+curl -X POST http://localhost:3030/api/v1/auth/register \
   -H "Content-Type: application/json" \
   -d '{
     "wallet_address": "0x1234567890123456789012345678901234567890",
@@ -165,7 +205,7 @@ curl -X POST http://localhost:3000/api/v1/auth/register \
 
 ### Login
 ```bash
-curl -X POST http://localhost:3000/api/v1/auth/login \
+curl -X POST http://localhost:3030/api/v1/auth/login \
   -H "Content-Type: application/json" \
   -d '{
     "email": "user@example.com",
@@ -175,13 +215,13 @@ curl -X POST http://localhost:3000/api/v1/auth/login \
 
 ### Access protected routes
 ```bash
-curl -X GET http://localhost:3000/api/v1/auth/profile \
+curl -X GET http://localhost:3030/api/v1/auth/profile \
   -H "Authorization: Bearer YOUR_JWT_TOKEN"
 ```
 
 ### Change password
 ```bash
-curl -X POST http://localhost:3000/api/v1/auth/change-password \
+curl -X POST http://localhost:3030/api/v1/auth/change-password \
   -H "Authorization: Bearer YOUR_JWT_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{

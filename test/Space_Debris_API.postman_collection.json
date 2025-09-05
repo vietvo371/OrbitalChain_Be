@@ -1,0 +1,1189 @@
+{
+  "info": {
+    "name": "Space Debris API",
+    "description": "Complete API collection for Space Debris Management System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3030/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "admin_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "moderator_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "user_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "item": [
+        {
+          "name": "Get Health Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"wallet_address\": \"0x1234567890123456789012345678901234567890\",\n  \"email\": \"testuser@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"user\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    pm.environment.set('user_token', response.access_token);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@orbitalchain.com\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.environment.set('admin_token', response.access_token);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login Moderator",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"moderator@orbitalchain.com\",\n  \"password\": \"moderator123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.environment.set('moderator_token', response.access_token);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user1@orbitalchain.com\",\n  \"password\": \"user123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.environment.set('user_token', response.access_token);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/profile",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "profile"]
+            }
+          }
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"user123\",\n  \"newPassword\": \"newpassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/change-password",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "change-password"]
+            }
+          }
+        },
+        {
+          "name": "Reset Password (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user1@orbitalchain.com\",\n  \"newPassword\": \"resetpassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/reset-password",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "reset-password"]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/logout",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "logout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get All Users (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/users?page=1&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["users"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/users/{user_id}",
+              "host": ["{{base_url}}"],
+              "path": ["users", "{user_id}"]
+            }
+          }
+        },
+        {
+          "name": "Get User by Wallet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/users/wallet/0x1234567890123456789012345678901234567890",
+              "host": ["{{base_url}}"],
+              "path": ["users", "wallet", "0x1234567890123456789012345678901234567890"]
+            }
+          }
+        },
+        {
+          "name": "Create User (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"wallet_address\": \"0x9876543210987654321098765432109876543210\",\n  \"email\": \"newuser@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"user\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": ["{{base_url}}"],
+              "path": ["users"]
+            }
+          }
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"updated@example.com\",\n  \"points\": 150\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/{user_id}",
+              "host": ["{{base_url}}"],
+              "path": ["users", "{user_id}"]
+            }
+          }
+        },
+        {
+          "name": "Update User Points",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"points\": 200\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/{user_id}/points",
+              "host": ["{{base_url}}"],
+              "path": ["users", "{user_id}", "points"]
+            }
+          }
+        },
+        {
+          "name": "Delete User (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/users/{user_id}",
+              "host": ["{{base_url}}"],
+              "path": ["users", "{user_id}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Debris",
+      "item": [
+        {
+          "name": "Get All Debris",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/debris?page=1&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["debris"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Debris by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/debris/{debris_id}",
+              "host": ["{{base_url}}"],
+              "path": ["debris", "{debris_id}"]
+            }
+          }
+        },
+        {
+          "name": "Get Debris by Catalog ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/debris/catalog/25544",
+              "host": ["{{base_url}}"],
+              "path": ["debris", "catalog", "25544"]
+            }
+          }
+        },
+        {
+          "name": "Get Debris by Risk Score",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/debris/risk?min=5&max=10",
+              "host": ["{{base_url}}"],
+              "path": ["debris", "risk"],
+              "query": [
+                {
+                  "key": "min",
+                  "value": "5"
+                },
+                {
+                  "key": "max",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Debris by Location",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/debris/location?lat=51.64&lon=123.45&radius=100",
+              "host": ["{{base_url}}"],
+              "path": ["debris", "location"],
+              "query": [
+                {
+                  "key": "lat",
+                  "value": "51.64"
+                },
+                {
+                  "key": "lon",
+                  "value": "123.45"
+                },
+                {
+                  "key": "radius",
+                  "value": "100"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Debris (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"catalog_id\": \"25544\",\n  \"source\": \"NORAD\",\n  \"epoch\": \"2024-01-15T12:00:00.000Z\",\n  \"tle_line1\": \"1 25544U 98067A   24015.50000000  .00000000  00000-0  00000+0 0  9990\",\n  \"tle_line2\": \"2 25544  51.6400 123.4567 0001234   0.0000   0.0000 15.12345678901234\",\n  \"lat\": 51.64,\n  \"lon\": 123.4567,\n  \"alt\": 400.5,\n  \"risk_score\": 8.5,\n  \"on_chain_tx\": \"0xabc123...\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/debris",
+              "host": ["{{base_url}}"],
+              "path": ["debris"]
+            }
+          }
+        },
+        {
+          "name": "Update Debris",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"risk_score\": 9.0,\n  \"on_chain_tx\": \"0xupdated123...\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/debris/{debris_id}",
+              "host": ["{{base_url}}"],
+              "path": ["debris", "{debris_id}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Debris (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/debris/{debris_id}",
+              "host": ["{{base_url}}"],
+              "path": ["debris", "{debris_id}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Observations",
+      "item": [
+        {
+          "name": "Get All Observations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/observations?page=1&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["observations"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Observation by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/observations/{observation_id}",
+              "host": ["{{base_url}}"],
+              "path": ["observations", "{observation_id}"]
+            }
+          }
+        },
+        {
+          "name": "Get Observations by User",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/observations/user/{user_id}",
+              "host": ["{{base_url}}"],
+              "path": ["observations", "user", "{user_id}"]
+            }
+          }
+        },
+        {
+          "name": "Get Observations by Debris",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/observations/debris/{debris_id}",
+              "host": ["{{base_url}}"],
+              "path": ["observations", "debris", "{debris_id}"]
+            }
+          }
+        },
+        {
+          "name": "Get Pending Observations (Moderator)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{moderator_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/observations/pending",
+              "host": ["{{base_url}}"],
+              "path": ["observations", "pending"]
+            }
+          }
+        },
+        {
+          "name": "Get Approved Observations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/observations/approved",
+              "host": ["{{base_url}}"],
+              "path": ["observations", "approved"]
+            }
+          }
+        },
+        {
+          "name": "Create Observation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"debris_id\": \"{debris_id}\",\n  \"image_url\": \"https://example.com/image.jpg\",\n  \"note\": \"Clear observation of debris object\",\n  \"location_lat\": 51.64,\n  \"location_lon\": 123.4567,\n  \"location_alt\": 400.5,\n  \"tx_hash\": \"0xobs123...\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/observations",
+              "host": ["{{base_url}}"],
+              "path": ["observations"]
+            }
+          }
+        },
+        {
+          "name": "Update Observation",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"note\": \"Updated observation note\",\n  \"image_url\": \"https://example.com/new-image.jpg\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/observations/{observation_id}",
+              "host": ["{{base_url}}"],
+              "path": ["observations", "{observation_id}"]
+            }
+          }
+        },
+        {
+          "name": "Approve Observation (Moderator)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{moderator_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/observations/{observation_id}/approve",
+              "host": ["{{base_url}}"],
+              "path": ["observations", "{observation_id}", "approve"]
+            }
+          }
+        },
+        {
+          "name": "Reject Observation (Moderator)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{moderator_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/observations/{observation_id}/reject",
+              "host": ["{{base_url}}"],
+              "path": ["observations", "{observation_id}", "reject"]
+            }
+          }
+        },
+        {
+          "name": "Delete Observation",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/observations/{observation_id}",
+              "host": ["{{base_url}}"],
+              "path": ["observations", "{observation_id}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Moderations",
+      "item": [
+        {
+          "name": "Get All Moderations (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/moderations",
+              "host": ["{{base_url}}"],
+              "path": ["moderations"]
+            }
+          }
+        },
+        {
+          "name": "Get Moderation by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/moderations/{moderation_id}",
+              "host": ["{{base_url}}"],
+              "path": ["moderations", "{moderation_id}"]
+            }
+          }
+        },
+        {
+          "name": "Get Moderations by Moderator",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/moderations/moderator/{moderator_id}",
+              "host": ["{{base_url}}"],
+              "path": ["moderations", "moderator", "{moderator_id}"]
+            }
+          }
+        },
+        {
+          "name": "Get Moderation by Observation",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/moderations/observation/{observation_id}",
+              "host": ["{{base_url}}"],
+              "path": ["moderations", "observation", "{observation_id}"]
+            }
+          }
+        },
+        {
+          "name": "Get Moderation Stats",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/moderations/stats",
+              "host": ["{{base_url}}"],
+              "path": ["moderations", "stats"]
+            }
+          }
+        },
+        {
+          "name": "Create Moderation (Moderator)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{moderator_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"observation_id\": \"{observation_id}\",\n  \"approved\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/moderations",
+              "host": ["{{base_url}}"],
+              "path": ["moderations"]
+            }
+          }
+        },
+        {
+          "name": "Update Moderation (Moderator)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{moderator_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"approved\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/moderations/{moderation_id}",
+              "host": ["{{base_url}}"],
+              "path": ["moderations", "{moderation_id}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Moderation (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/moderations/{moderation_id}",
+              "host": ["{{base_url}}"],
+              "path": ["moderations", "{moderation_id}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Blockchain Logs",
+      "item": [
+        {
+          "name": "Get All Blockchain Logs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/blockchain-logs",
+              "host": ["{{base_url}}"],
+              "path": ["blockchain-logs"]
+            }
+          }
+        },
+        {
+          "name": "Get Blockchain Log by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/blockchain-logs/{log_id}",
+              "host": ["{{base_url}}"],
+              "path": ["blockchain-logs", "{log_id}"]
+            }
+          }
+        },
+        {
+          "name": "Get Blockchain Logs by Debris",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/blockchain-logs/debris/{debris_id}",
+              "host": ["{{base_url}}"],
+              "path": ["blockchain-logs", "debris", "{debris_id}"]
+            }
+          }
+        },
+        {
+          "name": "Get Blockchain Log by Transaction",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/blockchain-logs/transaction/0xabc123...",
+              "host": ["{{base_url}}"],
+              "path": ["blockchain-logs", "transaction", "0xabc123..."]
+            }
+          }
+        },
+        {
+          "name": "Get Blockchain Logs by Block",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/blockchain-logs/block/18500000",
+              "host": ["{{base_url}}"],
+              "path": ["blockchain-logs", "block", "18500000"]
+            }
+          }
+        },
+        {
+          "name": "Get Blockchain Stats",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/blockchain-logs/stats",
+              "host": ["{{base_url}}"],
+              "path": ["blockchain-logs", "stats"]
+            }
+          }
+        },
+        {
+          "name": "Get Latest Block",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/blockchain-logs/latest-block",
+              "host": ["{{base_url}}"],
+              "path": ["blockchain-logs", "latest-block"]
+            }
+          }
+        },
+        {
+          "name": "Create Blockchain Log (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"debris_id\": \"{debris_id}\",\n  \"tx_hash\": \"0xabc123...\",\n  \"block_number\": 18500000\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/blockchain-logs",
+              "host": ["{{base_url}}"],
+              "path": ["blockchain-logs"]
+            }
+          }
+        },
+        {
+          "name": "Update Blockchain Log (Admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tx_hash\": \"0xupdated123...\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/blockchain-logs/{log_id}",
+              "host": ["{{base_url}}"],
+              "path": ["blockchain-logs", "{log_id}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Blockchain Log (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/blockchain-logs/{log_id}",
+              "host": ["{{base_url}}"],
+              "path": ["blockchain-logs", "{log_id}"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

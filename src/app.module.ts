@@ -10,6 +10,7 @@ import { ObservationModule } from './observation/observation.module';
 import { ModerationModule } from './moderation/moderation.module';
 import { BlockchainLogModule } from './blockchain_log/blockchain_log.module';
 import { AuthModule } from './auth/auth.module';
+import { SeederModule } from './database/seeders/seeder.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { AuthModule } from './auth/auth.module';
     ModerationModule,
     BlockchainLogModule,
     AuthModule,
+    SeederModule,
   ],
   controllers: [AppController],
   providers: [AppService],

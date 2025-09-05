@@ -32,6 +32,9 @@ export class User {
   @Column({ type: 'int', default: 0 })
   points: number;
 
+  @Column({ nullable: true })
+  avatar_url?: string;
+
   @CreateDateColumn()
   joined_at: Date;
 
